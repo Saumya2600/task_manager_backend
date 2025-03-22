@@ -1,18 +1,18 @@
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const socketIo = require('socket.io');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000; // Use PORT from .env or default to 5000
 
 // Middleware
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
-// MongoDB Connection String
-const MONGO_URI = 'mongodb+srv://shahsaumya261:cEtM6UYGYM0vLTed@cluster0.ccjh7.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0';
+// MongoDB Connection String (from .env)
+const MONGO_URI = process.env.MONGO_URI;
 
 // MongoDB Connection with Enhanced Options
 mongoose.connect(MONGO_URI, {

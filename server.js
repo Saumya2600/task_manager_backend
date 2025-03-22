@@ -1,14 +1,36 @@
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const cors = require('cors'); // Import CORS
 const socketIo = require('socket.io');
 
 const app = express();
-const PORT = process.env.PORT || 5000; // Use PORT from .env or default to 5000
+const PORT = process.env.PORT || 5000;
+
+// CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3000', // Allow local development
+  'https://task-manager-front-orcin.vercel.app/', // Replace with your frontend's Vercel URL
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
+        return callback(new Error(msg), false);
+      }
+
+      return callback(null, true);
+    },
+    credentials: true, // Allow cookies and credentials
+  })
+);
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 // MongoDB Connection String (from .env)

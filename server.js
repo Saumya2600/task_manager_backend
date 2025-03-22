@@ -1,16 +1,20 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import CORS
+const cors = require('cors');
 const socketIo = require('socket.io');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Log environment variables for debugging
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('PORT:', PORT);
+
 // CORS Configuration
 const allowedOrigins = [
   'http://localhost:3000', // Allow local development
-  'https://task-manager-front-orcin.vercel.app/', // Replace with your frontend's Vercel URL
+  'https://task-manager-front-orcin.vercel.app', // Replace with your frontend's Vercel URL
 ];
 
 app.use(

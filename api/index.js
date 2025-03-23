@@ -1,5 +1,5 @@
 // /backend/api/index.js
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -43,18 +43,19 @@ if (!MONGO_URI) {
 }
 
 // MongoDB Connection with Enhanced Options
-mongoose.connect(MONGO_URI, {
-  serverSelectionTimeoutMS: 5000,
-  connectTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-  family: 4,
-})
+mongoose
+  .connect(MONGO_URI, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    family: 4,
+  })
   .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+  .catch((err) => console.error('MongoDB Connection Error:', err));
 
 // Routes
 app.use('/api/auth', require('../routes/auth'));
 app.use('/api/tasks', require('../routes/tasks'));
 
 // Export as a serverless function
-module.exports = serverless(app);
+module.exports.handler = serverless(app);

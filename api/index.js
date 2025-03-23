@@ -1,15 +1,16 @@
+// /backend/api/index.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const serverless = require('serverless-http'); // Add this
+const serverless = require('serverless-http');
 
 const app = express();
 
 // CORS Configuration
 const allowedOrigins = [
-  'http://localhost:3000', // Allow local development
-  'https://task-manager-front-orcin.vercel.app', // Allow frontend hosted on Vercel
+  'http://localhost:3000',
+  'https://task-manager-front-orcin.vercel.app',
 ];
 
 app.use(
@@ -42,9 +43,9 @@ mongoose.connect(MONGO_URI, {
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Routes (Adjust paths to point to /backend/routes)
-app.use('/api/auth', require('../backend/routes/auth'));
-app.use('/api/tasks', require('../backend/routes/tasks'));
+// Routes (Fixed paths)
+app.use('/api/auth', require('../routes/auth')); // Correct path
+app.use('/api/tasks', require('../routes/tasks')); // Correct path
 
-// Export the app as a serverless function
+// Export as a serverless function
 module.exports = serverless(app);

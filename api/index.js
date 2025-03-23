@@ -1,5 +1,5 @@
 // /backend/api/index.js
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -30,8 +30,17 @@ app.use(
 // Middleware
 app.use(express.json());
 
+// Test route (no MongoDB dependency)
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working' });
+});
+
 // MongoDB Connection String (from .env)
 const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  throw new Error('MONGO_URI is not defined in the environment variables');
+}
 
 // MongoDB Connection with Enhanced Options
 mongoose.connect(MONGO_URI, {
@@ -43,9 +52,9 @@ mongoose.connect(MONGO_URI, {
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Routes (Fixed paths)
-app.use('/api/auth', require('../routes/auth')); // Correct path
-app.use('/api/tasks', require('../routes/tasks')); // Correct path
+// Routes
+app.use('/api/auth', require('../routes/auth'));
+app.use('/api/tasks', require('../routes/tasks'));
 
 // Export as a serverless function
 module.exports = serverless(app);
